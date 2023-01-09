@@ -1,11 +1,25 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'xcresult'
+description: 'Generates annotations from an xcresult bundle'
+author: 'Nomasystems'
 inputs:
-  milliseconds: # change this
+  xcresult-path:
+    description: 'Path to the xcresult bundle'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  path-root:
+    description: 'Root for paths in the xcresult bundle'
+    default: ${{ env.GITHUB_WORKSPACE }}
+  fail-on-error:
+    description: 'Set a failure exit code if the xcresult indicates an error'
+    default: true
+  fail-on-warning:
+    description: 'Set a failure exit code if the xcresult indicates a warning'
+    default: true
+  fail-on-analyzer-warning:
+    description: 'Set a failure exit code if the xcresult indicates an analyzer warning'
+    default: true
+  fail-on-test-failure:
+    description: 'Set a failure exit code if the xcresult indicates a test failure'
+    default: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
