@@ -6,8 +6,7 @@ inputs:
     description: 'Path to the xcresult bundle'
     required: true
   path-root:
-    description: 'Root for paths in the xcresult bundle'
-    default: ${{ env.GITHUB_WORKSPACE }}
+    description: 'Root for paths in the xcresult bundle. Defaults to env.GITHUB_WORKSPACE'
   fail-on-error:
     description: 'Set a failure exit code if the xcresult indicates an error'
     default: true

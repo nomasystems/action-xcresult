@@ -102,7 +102,19 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const xcresultPath = core.getInput('xcresult-path');
-            const pathRoot = core.getInput('path-root');
+            const pathRoot = (() => {
+                const inputValue = core.getInput('path-root', { required: false });
+                if (inputValue !== '') {
+                    return inputValue;
+                }
+                else {
+                    const githubWorkspace = process.env.GITHUB_WORKSPACE;
+                    if (!githubWorkspace) {
+                        throw new Error('$GITHUB_WORKSPACE is not set');
+                    }
+                    return githubWorkspace;
+                }
+            })();
             const failOnError = core.getBooleanInput('fail-on-error');
             const failOnWarning = core.getBooleanInput('fail-on-warning');
             const failOnAnalyzerWarning = core.getBooleanInput('fail-on-analyzer-warning');
