@@ -53,12 +53,22 @@ function properties(annotation) {
     const properties = {
         title: annotation.title,
         file: annotation.path,
-        startLines: (_a = annotation.location) === null || _a === void 0 ? void 0 : _a.startLine,
-        endLine: (_b = annotation.location) === null || _b === void 0 ? void 0 : _b.endLine,
-        startColumn: (_c = annotation.location) === null || _c === void 0 ? void 0 : _c.startColumn,
-        endColumn: (_d = annotation.location) === null || _d === void 0 ? void 0 : _d.endColumn
+        startLines: addOneToLineColumn((_a = annotation.location) === null || _a === void 0 ? void 0 : _a.startLine),
+        endLine: addOneToLineColumn((_b = annotation.location) === null || _b === void 0 ? void 0 : _b.endLine),
+        startColumn: addOneToLineColumn((_c = annotation.location) === null || _c === void 0 ? void 0 : _c.startColumn),
+        endColumn: addOneToLineColumn((_d = annotation.location) === null || _d === void 0 ? void 0 : _d.endColumn)
     };
     return properties;
+}
+// Line numbers and column numbers are 0-based in xcresult
+// but 1-based in github annotations.
+function addOneToLineColumn(n) {
+    if (n) {
+        return n + 1;
+    }
+    else {
+        return undefined;
+    }
 }
 
 
@@ -130,18 +140,18 @@ function run() {
             const output = yield (0, xcresult_1.xcresultToJson)(xcresultPath, pathRoot);
             (0, annotations_1.outputAnnotations)(output.annotations);
             if (failOnError && ((_b = (_a = output.metrics) === null || _a === void 0 ? void 0 : _a.errorCount) !== null && _b !== void 0 ? _b : 0) > 0) {
-                core.setFailed(`${(_c = output.metrics) === null || _c === void 0 ? void 0 : _c.errorCount} error(s)`);
+                core.setFailed(`${(_c = output.metrics) === null || _c === void 0 ? void 0 : _c.errorCount} error(s) in xcresult`);
             }
             else if (failOnWarning && ((_e = (_d = output.metrics) === null || _d === void 0 ? void 0 : _d.warningCount) !== null && _e !== void 0 ? _e : 0) > 0) {
-                core.setFailed(`${(_f = output.metrics) === null || _f === void 0 ? void 0 : _f.warningCount} warning(s)`);
+                core.setFailed(`${(_f = output.metrics) === null || _f === void 0 ? void 0 : _f.warningCount} warning(s) in xcresult`);
             }
             else if (failOnAnalyzerWarning &&
                 ((_h = (_g = output.metrics) === null || _g === void 0 ? void 0 : _g.analyzerWarningCount) !== null && _h !== void 0 ? _h : 0) > 0) {
-                core.setFailed(`${(_j = output.metrics) === null || _j === void 0 ? void 0 : _j.analyzerWarningCount} analyzer warnings(s)`);
+                core.setFailed(`${(_j = output.metrics) === null || _j === void 0 ? void 0 : _j.analyzerWarningCount} analyzer warnings(s) in xcresult`);
             }
             else if (failOnTestFailure &&
                 ((_l = (_k = output.metrics) === null || _k === void 0 ? void 0 : _k.testFailedCount) !== null && _l !== void 0 ? _l : 0) > 0) {
-                core.setFailed(`${(_m = output.metrics) === null || _m === void 0 ? void 0 : _m.testFailedCount} test(s) failed`);
+                core.setFailed(`${(_m = output.metrics) === null || _m === void 0 ? void 0 : _m.testFailedCount} test(s) failed in xcresult`);
             }
         }
         catch (error) {

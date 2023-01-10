@@ -22,10 +22,20 @@ function properties(annotation: Annotation): AnnotationProperties {
   const properties = {
     title: annotation.title,
     file: annotation.path,
-    startLines: annotation.location?.startLine,
-    endLine: annotation.location?.endLine,
-    startColumn: annotation.location?.startColumn,
-    endColumn: annotation.location?.endColumn
+    startLines: addOneToLineColumn(annotation.location?.startLine),
+    endLine: addOneToLineColumn(annotation.location?.endLine),
+    startColumn: addOneToLineColumn(annotation.location?.startColumn),
+    endColumn: addOneToLineColumn(annotation.location?.endColumn)
   }
   return properties
+}
+
+// Line numbers and column numbers are 0-based in xcresult
+// but 1-based in github annotations.
+function addOneToLineColumn(n: number | undefined): number | undefined {
+  if (n) {
+    return n + 1
+  } else {
+    return undefined
+  }
 }
