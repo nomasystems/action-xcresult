@@ -29,21 +29,23 @@ async function run(): Promise<void> {
     outputAnnotations(output.annotations)
 
     if (failOnError && (output.metrics?.errorCount ?? 0) > 0) {
-      core.setFailed(`${output.metrics?.errorCount} error(s)`)
+      core.setFailed(`${output.metrics?.errorCount} error(s) in xcresult`)
     } else if (failOnWarning && (output.metrics?.warningCount ?? 0) > 0) {
-      core.setFailed(`${output.metrics?.warningCount} warning(s)`)
+      core.setFailed(`${output.metrics?.warningCount} warning(s) in xcresult`)
     } else if (
       failOnAnalyzerWarning &&
       (output.metrics?.analyzerWarningCount ?? 0) > 0
     ) {
       core.setFailed(
-        `${output.metrics?.analyzerWarningCount} analyzer warnings(s)`
+        `${output.metrics?.analyzerWarningCount} analyzer warnings(s) in xcresult`
       )
     } else if (
       failOnTestFailure &&
       (output.metrics?.testFailedCount ?? 0) > 0
     ) {
-      core.setFailed(`${output.metrics?.testFailedCount} test(s) failed`)
+      core.setFailed(
+        `${output.metrics?.testFailedCount} test(s) failed in xcresult`
+      )
     }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
