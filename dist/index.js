@@ -194,19 +194,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.xcresultToJson = void 0;
+const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
 function xcresultToJson(xcresultPath, pathRoot) {
     return __awaiter(this, void 0, void 0, function* () {
         const args = [xcresultPath].concat(['--path-root', pathRoot]);
-        var output = '';
         const options = { silent: true };
-        options.listeners = {
-            stdout: (data) => {
-                output += data.toString();
+        const execOutput = yield exec.getExecOutput('xcresult-to-json', args, options);
+        if (execOutput.exitCode === 0) {
+            return JSON.parse(execOutput.stdout);
+        }
+        else {
+            if (execOutput.stderr !== '') {
+                core.error(`xcresult-to-json: ${execOutput.stderr}`);
             }
-        };
-        yield exec.exec('xcresult-to-json', args, options);
-        return JSON.parse(output);
+            throw Error(`xcresult-to-json failed with exit code: ${execOutput.exitCode}`);
+        }
     });
 }
 exports.xcresultToJson = xcresultToJson;
