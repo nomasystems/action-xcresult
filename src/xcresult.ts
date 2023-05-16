@@ -27,7 +27,7 @@ export async function xcresultToJson(
 
 async function cachedDownload(): Promise<string> {
   const name = 'xcresult-to-json'
-  const version = '0.2'
+  const version = '0.2.0'
   const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/${version}/xcresult-to-json.zip`
 
   var cachedPath = tc.find(name, version)
