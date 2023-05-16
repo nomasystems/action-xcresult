@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
+import * as path from 'path'
 import {ExecOptions} from '@actions/exec'
 import {Output} from './__generated__/output'
 
@@ -32,11 +33,11 @@ async function cachedDownload(): Promise<string> {
   var cachedPath = tc.find(name, version)
   if (cachedPath) {
     core.info(`Found ${name} in cache: ${cachedPath}`)
-    return cachedPath
+  } else {
+    core.info(`Downloading ${name}`)
+    const downloadPath = await tc.downloadTool(downloadUrl)
+    const extractedDir = await tc.extractZip(downloadPath)
+    cachedPath = await tc.cacheDir(extractedDir, name, version)
   }
-  core.info(`Downloading ${name}`)
-  const downloadPath = await tc.downloadTool(downloadUrl)
-  const extractedDir = await tc.extractZip(downloadPath)
-  cachedPath = await tc.cacheDir(extractedDir, name, version)
-  return cachedPath
+  return path.join(cachedPath, name)
 }

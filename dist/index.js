@@ -207,6 +207,7 @@ exports.xcresultToJson = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
+const path = __importStar(__nccwpck_require__(1017));
 function xcresultToJson(xcresultPath, pathRoot) {
     return __awaiter(this, void 0, void 0, function* () {
         const args = [xcresultPath].concat(['--path-root', pathRoot]);
@@ -233,13 +234,14 @@ function cachedDownload() {
         var cachedPath = tc.find(name, version);
         if (cachedPath) {
             core.info(`Found ${name} in cache: ${cachedPath}`);
-            return cachedPath;
         }
-        core.info(`Downloading ${name}`);
-        const downloadPath = yield tc.downloadTool(downloadUrl);
-        const extractedDir = yield tc.extractZip(downloadPath);
-        cachedPath = yield tc.cacheDir(extractedDir, name, version);
-        return cachedPath;
+        else {
+            core.info(`Downloading ${name}`);
+            const downloadPath = yield tc.downloadTool(downloadUrl);
+            const extractedDir = yield tc.extractZip(downloadPath);
+            cachedPath = yield tc.cacheDir(extractedDir, name, version);
+        }
+        return path.join(cachedPath, name);
     });
 }
 
