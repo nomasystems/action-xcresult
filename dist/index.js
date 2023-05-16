@@ -208,6 +208,8 @@ const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
 const path = __importStar(__nccwpck_require__(1017));
+const crypto = __importStar(__nccwpck_require__(6113));
+const fs = __importStar(__nccwpck_require__(7147));
 function xcresultToJson(xcresultPath, pathRoot) {
     return __awaiter(this, void 0, void 0, function* () {
         const args = [xcresultPath].concat(['--path-root', pathRoot]);
@@ -229,20 +231,31 @@ exports.xcresultToJson = xcresultToJson;
 function cachedDownload() {
     return __awaiter(this, void 0, void 0, function* () {
         const name = 'xcresult-to-json';
-        const version = '0.2';
+        const version = '0.2.0';
         const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/${version}/xcresult-to-json.zip`;
+        const checksum = '1b44cffc86758237413f3fca49ae9686f3bd65fea60b95cbd1c6d29967cb89da';
         var cachedPath = tc.find(name, version);
         if (cachedPath) {
-            core.info(`Found ${name} in cache: ${cachedPath}`);
+            core.debug(`Found ${name} in cache: ${cachedPath}`);
         }
         else {
-            core.info(`Downloading ${name}`);
+            core.debug(`Downloading ${name}`);
             const downloadPath = yield tc.downloadTool(downloadUrl);
+            const downloadChecksum = fileChecksum(downloadPath);
+            if (downloadChecksum !== checksum) {
+                throw new Error(`${downloadPath} checksum mismatch, actual: ${downloadChecksum}, expected: ${checksum}`);
+            }
             const extractedDir = yield tc.extractZip(downloadPath);
             cachedPath = yield tc.cacheDir(extractedDir, name, version);
         }
         return path.join(cachedPath, name);
     });
+}
+function fileChecksum(filePath) {
+    const fileBuffer = fs.readFileSync(filePath);
+    const hashSum = crypto.createHash('sha256');
+    hashSum.update(fileBuffer);
+    return hashSum.digest('hex');
 }
 
 
