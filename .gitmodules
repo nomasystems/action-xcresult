@@ -1,0 +1,3 @@
+[submodule "xcresult-to-json"]
+	path = xcresult-to-json
+	url = git@github.com:nomasystems/xcresult-to-json.git
