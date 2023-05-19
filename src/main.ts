@@ -20,6 +20,9 @@ async function run(): Promise<void> {
     })()
     const failOnError = core.getBooleanInput('fail-on-error')
     const failOnWarning = core.getBooleanInput('fail-on-warning')
+    const failOnExternalWarning = core.getBooleanInput(
+      'fail-on-external-warning'
+    )
     const failOnAnalyzerWarning = core.getBooleanInput(
       'fail-on-analyzer-warning'
     )
@@ -28,10 +31,13 @@ async function run(): Promise<void> {
     const output = await xcresultToJson(xcresultPath, pathRoot)
     outputAnnotations(output.annotations)
 
+    const warningCount =
+      (output.metrics?.warningCount ?? 0) +
+      (failOnExternalWarning ? output.metrics?.externalWarningCount ?? 0 : 0)
     if (failOnError && (output.metrics?.errorCount ?? 0) > 0) {
       core.setFailed(`${output.metrics?.errorCount} error(s) in xcresult`)
-    } else if (failOnWarning && (output.metrics?.warningCount ?? 0) > 0) {
-      core.setFailed(`${output.metrics?.warningCount} warning(s) in xcresult`)
+    } else if (failOnWarning && warningCount > 0) {
+      core.setFailed(`${warningCount} warning(s) in xcresult`)
     } else if (
       failOnAnalyzerWarning &&
       (output.metrics?.analyzerWarningCount ?? 0) > 0

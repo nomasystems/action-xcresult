@@ -29,10 +29,10 @@ export async function xcresultToJson(
 
 async function cachedDownload(): Promise<string> {
   const name = 'xcresult-to-json'
-  const version = '0.2.0'
-  const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/${version}/xcresult-to-json.zip`
+  const version = '0.3.0'
+  const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/v${version}/xcresult-to-json.zip`
   const checksum =
-    '1b44cffc86758237413f3fca49ae9686f3bd65fea60b95cbd1c6d29967cb89da'
+    'bb0200fd60d99d0caf53d3518261e9aba19ae4cd395f96f14fe3512fc003fbf6'
 
   var cachedPath = tc.find(name, version)
   if (cachedPath) {
