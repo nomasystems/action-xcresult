@@ -116,7 +116,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const xcresult_1 = __nccwpck_require__(3975);
 const annotations_1 = __nccwpck_require__(5598);
 function run() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const xcresultPath = core.getInput('xcresult-path');
@@ -135,23 +135,26 @@ function run() {
             })();
             const failOnError = core.getBooleanInput('fail-on-error');
             const failOnWarning = core.getBooleanInput('fail-on-warning');
+            const failOnExternalWarning = core.getBooleanInput('fail-on-external-warning');
             const failOnAnalyzerWarning = core.getBooleanInput('fail-on-analyzer-warning');
             const failOnTestFailure = core.getBooleanInput('fail-on-test-failure');
             const output = yield (0, xcresult_1.xcresultToJson)(xcresultPath, pathRoot);
             (0, annotations_1.outputAnnotations)(output.annotations);
-            if (failOnError && ((_b = (_a = output.metrics) === null || _a === void 0 ? void 0 : _a.errorCount) !== null && _b !== void 0 ? _b : 0) > 0) {
-                core.setFailed(`${(_c = output.metrics) === null || _c === void 0 ? void 0 : _c.errorCount} error(s) in xcresult`);
+            const warningCount = ((_b = (_a = output.metrics) === null || _a === void 0 ? void 0 : _a.warningCount) !== null && _b !== void 0 ? _b : 0) +
+                (failOnExternalWarning ? (_d = (_c = output.metrics) === null || _c === void 0 ? void 0 : _c.externalWarningCount) !== null && _d !== void 0 ? _d : 0 : 0);
+            if (failOnError && ((_f = (_e = output.metrics) === null || _e === void 0 ? void 0 : _e.errorCount) !== null && _f !== void 0 ? _f : 0) > 0) {
+                core.setFailed(`${(_g = output.metrics) === null || _g === void 0 ? void 0 : _g.errorCount} error(s) in xcresult`);
             }
-            else if (failOnWarning && ((_e = (_d = output.metrics) === null || _d === void 0 ? void 0 : _d.warningCount) !== null && _e !== void 0 ? _e : 0) > 0) {
-                core.setFailed(`${(_f = output.metrics) === null || _f === void 0 ? void 0 : _f.warningCount} warning(s) in xcresult`);
+            else if (failOnWarning && warningCount > 0) {
+                core.setFailed(`${warningCount} warning(s) in xcresult`);
             }
             else if (failOnAnalyzerWarning &&
-                ((_h = (_g = output.metrics) === null || _g === void 0 ? void 0 : _g.analyzerWarningCount) !== null && _h !== void 0 ? _h : 0) > 0) {
-                core.setFailed(`${(_j = output.metrics) === null || _j === void 0 ? void 0 : _j.analyzerWarningCount} analyzer warnings(s) in xcresult`);
+                ((_j = (_h = output.metrics) === null || _h === void 0 ? void 0 : _h.analyzerWarningCount) !== null && _j !== void 0 ? _j : 0) > 0) {
+                core.setFailed(`${(_k = output.metrics) === null || _k === void 0 ? void 0 : _k.analyzerWarningCount} analyzer warnings(s) in xcresult`);
             }
             else if (failOnTestFailure &&
-                ((_l = (_k = output.metrics) === null || _k === void 0 ? void 0 : _k.testFailedCount) !== null && _l !== void 0 ? _l : 0) > 0) {
-                core.setFailed(`${(_m = output.metrics) === null || _m === void 0 ? void 0 : _m.testFailedCount} test(s) failed in xcresult`);
+                ((_m = (_l = output.metrics) === null || _l === void 0 ? void 0 : _l.testFailedCount) !== null && _m !== void 0 ? _m : 0) > 0) {
+                core.setFailed(`${(_o = output.metrics) === null || _o === void 0 ? void 0 : _o.testFailedCount} test(s) failed in xcresult`);
             }
         }
         catch (error) {
@@ -231,9 +234,9 @@ exports.xcresultToJson = xcresultToJson;
 function cachedDownload() {
     return __awaiter(this, void 0, void 0, function* () {
         const name = 'xcresult-to-json';
-        const version = '0.2.0';
-        const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/${version}/xcresult-to-json.zip`;
-        const checksum = '1b44cffc86758237413f3fca49ae9686f3bd65fea60b95cbd1c6d29967cb89da';
+        const version = '0.3.0';
+        const downloadUrl = `https://github.com/nomasystems/xcresult-to-json/releases/download/v${version}/xcresult-to-json.zip`;
+        const checksum = 'bb0200fd60d99d0caf53d3518261e9aba19ae4cd395f96f14fe3512fc003fbf6';
         var cachedPath = tc.find(name, version);
         if (cachedPath) {
             core.debug(`Found ${name} in cache: ${cachedPath}`);

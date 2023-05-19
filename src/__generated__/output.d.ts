@@ -16,6 +16,7 @@ export interface Output {
 export interface Metrics {
   analyzerWarningCount: number;
   errorCount: number;
+  externalWarningCount: number;
   testCount: number;
   testFailedCount: number;
   testSkippedCount: number;
@@ -27,6 +28,10 @@ export interface Annotation {
    * The file path
    */
   path?: string;
+  /**
+   * Whether path is relative
+   */
+  isPathRelative: boolean;
   location?: SourceLocation;
   /**
    * The level of the annotation.

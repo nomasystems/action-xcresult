@@ -13,6 +13,9 @@ inputs:
   fail-on-warning:
     description: 'Set a failure exit code if the xcresult indicates a warning'
     default: true
+  fail-on-external-warning:
+    description: 'Whether fail-on-warning considers warnings in files outside path-root'
+    default: false
   fail-on-analyzer-warning:
     description: 'Set a failure exit code if the xcresult indicates an analyzer warning'
     default: true
