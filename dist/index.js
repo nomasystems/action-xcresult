@@ -30,7 +30,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.outputAnnotations = void 0;
+exports.outputAnnotations = outputAnnotations;
 const core = __importStar(__nccwpck_require__(2186));
 function outputAnnotations(annotations) {
     for (let annotation of annotations) {
@@ -47,7 +47,6 @@ function outputAnnotations(annotations) {
         }
     }
 }
-exports.outputAnnotations = outputAnnotations;
 function properties(annotation) {
     var _a, _b, _c, _d;
     const properties = {
@@ -116,8 +115,8 @@ const core = __importStar(__nccwpck_require__(2186));
 const xcresult_1 = __nccwpck_require__(3975);
 const annotations_1 = __nccwpck_require__(5598);
 function run() {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
         try {
             const xcresultPath = core.getInput('xcresult-path');
             const pathRoot = (() => {
@@ -141,7 +140,7 @@ function run() {
             const output = yield (0, xcresult_1.xcresultToJson)(xcresultPath, pathRoot);
             (0, annotations_1.outputAnnotations)(output.annotations);
             const warningCount = ((_b = (_a = output.metrics) === null || _a === void 0 ? void 0 : _a.warningCount) !== null && _b !== void 0 ? _b : 0) +
-                (failOnExternalWarning ? (_d = (_c = output.metrics) === null || _c === void 0 ? void 0 : _c.externalWarningCount) !== null && _d !== void 0 ? _d : 0 : 0);
+                (failOnExternalWarning ? ((_d = (_c = output.metrics) === null || _c === void 0 ? void 0 : _c.externalWarningCount) !== null && _d !== void 0 ? _d : 0) : 0);
             if (failOnError && ((_f = (_e = output.metrics) === null || _e === void 0 ? void 0 : _e.errorCount) !== null && _f !== void 0 ? _f : 0) > 0) {
                 core.setFailed(`${(_g = output.metrics) === null || _g === void 0 ? void 0 : _g.errorCount} error(s) in xcresult`);
             }
@@ -206,7 +205,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.xcresultToJson = void 0;
+exports.xcresultToJson = xcresultToJson;
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
 const tc = __importStar(__nccwpck_require__(7784));
@@ -230,7 +229,6 @@ function xcresultToJson(xcresultPath, pathRoot) {
         }
     });
 }
-exports.xcresultToJson = xcresultToJson;
 function cachedDownload() {
     return __awaiter(this, void 0, void 0, function* () {
         const name = 'xcresult-to-json';
@@ -821,7 +819,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {

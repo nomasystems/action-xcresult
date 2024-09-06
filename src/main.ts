@@ -33,7 +33,7 @@ async function run(): Promise<void> {
 
     const warningCount =
       (output.metrics?.warningCount ?? 0) +
-      (failOnExternalWarning ? output.metrics?.externalWarningCount ?? 0 : 0)
+      (failOnExternalWarning ? (output.metrics?.externalWarningCount ?? 0) : 0)
     if (failOnError && (output.metrics?.errorCount ?? 0) > 0) {
       core.setFailed(`${output.metrics?.errorCount} error(s) in xcresult`)
     } else if (failOnWarning && warningCount > 0) {
